@@ -1,19 +1,24 @@
-import { Routes, Route } from 'react-router-dom';
+import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
+import ErrorPage from './pages/ErrorPage';
 import Layout from './pages/Layout';
-import LoginPage from './pages/LoginPage';
+import LoginPage, { loginLoader } from './pages/LoginPage';
 import SignUp from './pages/SignUp';
 import StartPage from './pages/StartPage';
 
 const AppRouter: React.FC = () => {
-  return (
-    <Routes>
+  const router = createBrowserRouter(
+    createRoutesFromElements(
       <Route path="/" element={<Layout />}>
-        <Route path="home" element={<StartPage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="signup" element={<SignUp />} />
+        <Route errorElement={<ErrorPage />}>
+          <Route index element={<StartPage />} />
+          <Route path="login" element={<LoginPage />} loader={loginLoader} />
+          <Route path="signup" element={<SignUp />} />
+        </Route>
       </Route>
-    </Routes>
+    )
   );
+
+  return <RouterProvider router={router} />;
 };
 
 export default AppRouter;
