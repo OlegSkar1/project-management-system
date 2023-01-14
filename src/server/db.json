@@ -19,6 +19,16 @@
       "email": "olegSkar",
       "password": "admin",
       "id": 4
+    },
+    {
+      "email": "user@example.com",
+      "password": "password",
+      "id": 5
+    },
+    {
+      "email": "user@exampleds.com",
+      "password": "password",
+      "id": 6
     }
   ]
 }

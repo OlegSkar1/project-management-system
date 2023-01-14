@@ -1,81 +1,53 @@
-import React, { useState } from 'react';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Menu } from 'antd';
-
-const items: MenuProps['items'] = [
-  {
-    label: 'Navigation One',
-    key: 'mail',
-    icon: <MailOutlined />,
-  },
-  {
-    label: 'Navigation Two',
-    key: 'app',
-    icon: <AppstoreOutlined />,
-    disabled: true,
-  },
-  {
-    label: 'Navigation Three - Submenu',
-    key: 'SubMenu',
-    icon: <SettingOutlined />,
-    children: [
-      {
-        type: 'group',
-        label: 'Item 1',
-        children: [
-          {
-            label: 'Option 1',
-            key: 'setting:1',
-          },
-          {
-            label: 'Option 2',
-            key: 'setting:2',
-          },
-        ],
-      },
-      {
-        type: 'group',
-        label: 'Item 2',
-        children: [
-          {
-            label: 'Option 3',
-            key: 'setting:3',
-          },
-          {
-            label: 'Option 4',
-            key: 'setting:4',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: (
-      <a href="https://ant.design" target="_blank" rel="noopener noreferrer">
-        Navigation Four - Link
-      </a>
-    ),
-    key: 'alipay',
-  },
-];
+import { Button, Space } from 'antd';
+import { Layout } from 'antd';
+import logo from '../assets/logo/logo_no_bg.png';
+import { useNavigate } from 'react-router-dom';
+import { LOGIN, SIGNUP } from '../router/constants';
 
 const Header: React.FC = () => {
-  const [current, setCurrent] = useState('mail');
-
-  const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e);
-    setCurrent(e.key);
-  };
+  const { Header } = Layout;
+  const navigate = useNavigate();
 
   return (
-    <Menu
-      onClick={onClick}
-      selectedKeys={[current]}
-      mode="horizontal"
-      items={items}
-      style={{ display: 'flex', justifyContent: 'center' }}
-    />
+    <Layout style={{ width: '100vw', background: '#001529' }}>
+      <Header
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          maxWidth: '1320px',
+          margin: '0 auto',
+          width: '100%',
+        }}
+      >
+        {/* <div
+          style={{
+            backgroundImage: `url(${logo})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            cursor: 'pointer',
+            height: '100%',
+            width: '200px',
+          }}
+          onClick={() => navigate('/')}
+        ></div> */}
+        <img
+          src={logo}
+          alt="logo"
+          style={{ height: '150%', cursor: 'pointer' }}
+          onClick={() => navigate('/')}
+        />
+        <Space>
+          <Button type="primary" onClick={() => navigate(LOGIN)}>
+            Sign In
+          </Button>
+          <Button type="primary" onClick={() => navigate(SIGNUP)}>
+            Sign Up
+          </Button>
+        </Space>
+      </Header>
+    </Layout>
   );
 };
 

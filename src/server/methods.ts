@@ -4,7 +4,14 @@ import { IUser } from './models';
 import _ from 'lodash';
 
 export const signIn = async (email: string) => {
-  return await axios.get<IUser>(BASE_URL + `users/?email=${email}`);
+  const res = await axios.get<IUser[]>(BASE_URL + `users/?email=${email}`);
+  if (res.data.length === 0) {
+    throw new Response('', {
+      status: 404,
+      statusText: 'user not found',
+    });
+  }
+  return res.data[0];
 };
 
 export const signUp = async (user: IUser) => {
@@ -16,9 +23,13 @@ export const signUp = async (user: IUser) => {
     const response = await axios.post<IUser>(BASE_URL + 'users', user, {
       headers: { 'Content-Type': 'application/json' },
     });
+    console.log(response.data);
     return response.data;
   } else {
-    throw new Error('user alredy exist!');
+    throw new Response('', {
+      status: 404,
+      statusText: 'user alredy exist!',
+    });
   }
 };
 

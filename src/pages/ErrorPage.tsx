@@ -1,24 +1,34 @@
-import { ErrorResponse } from '@remix-run/router';
+import { AxiosError } from 'axios';
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
 
 const ErrorPage = () => {
-  const error = useRouteError() as ErrorResponse;
+  const error = useRouteError();
   console.log(error);
 
   if (isRouteErrorResponse(error)) {
     if (error.status === 404) {
+      return (
+        <div id="error-page">
+          <h1>Oops!</h1>
+          <p>Sorry, an unexpected error has occurred.</p>
+          <p>
+            <i>{error.statusText}</i>
+          </p>
+        </div>
+      );
     }
+  } else if (error instanceof AxiosError) {
+    return (
+      <div id="error-page">
+        <h1>Oops!</h1>
+        <p>Sorry, an unexpected error has occurred.</p>
+        <p>
+          <i>{error.message}</i>
+        </p>
+      </div>
+    );
   }
-
-  return (
-    <div id="error-page">
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
-      <p>
-        <i>{error.statusText || error.data.message}</i>
-      </p>
-    </div>
-  );
+  return <div>error</div>;
 };
 
 export default ErrorPage;
