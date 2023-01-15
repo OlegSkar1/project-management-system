@@ -1,7 +1,7 @@
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
 import ErrorPage from '../pages/ErrorPage';
 import LayoutPage from '../pages/Layout';
-import LoginPage from '../pages/LoginPage';
+import LoginPage from '../pages/LoginPage/LoginPage';
 import SignUp from '../pages/SignUp';
 import StartPage from '../pages/StartPage';
 import { LOGIN, SIGNUP } from './constants';

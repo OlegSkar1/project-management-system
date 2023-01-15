@@ -1,0 +1,8 @@
+.LoginPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: no-repeat center/cover url('../../assets/bg-login-3.jpg');
+  height: calc(100vh - 64px - 64px);
+}

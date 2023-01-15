@@ -1,7 +1,18 @@
+import { ConfigProvider } from 'antd';
 import AppRouter from './router/AppRouter';
 
 const App: React.FC = () => {
-  return <AppRouter />;
+  return (
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#001f4c',
+        },
+      }}
+    >
+      <AppRouter />
+    </ConfigProvider>
+  );
 };
 
 export default App;

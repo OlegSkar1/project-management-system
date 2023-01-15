@@ -6,14 +6,16 @@ import Header from '../components/Header';
 
 const LayoutPage: React.FC = () => {
   return (
-    <Layout style={{ flex: 1, height: '100vh' }}>
-      <Header />
-      <Layout>
-        <Outlet />
-      </Layout>
+    <Layout style={{ height: '100vh' }}>
+      <div style={{ flex: 1 }}>
+        <Header />
+        <Layout>
+          <Outlet />
+        </Layout>
+      </div>
       <Layout.Footer>
         <Footer />
-      </Layout.Footer>{' '}
+      </Layout.Footer>
     </Layout>
   );
 };
