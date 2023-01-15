@@ -1,6 +1,12 @@
+import { Layout } from 'antd';
 import React from 'react';
-import styles from './SignUp.module.scss';
+import { SignUp } from '../../components/SignUp';
+import styles from './SignUpPage.module.scss';
 
 export const SignUpPage: React.FC = () => {
-  return <div>user</div>;
+  return (
+    <Layout.Content className={styles.container}>
+      <SignUp />
+    </Layout.Content>
+  );
 };
