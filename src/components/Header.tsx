@@ -1,43 +1,49 @@
-import { Button, Col, Menu, MenuProps, MenuTheme, Row, Space } from 'antd';
+import { Menu, MenuProps } from 'antd';
 import { Layout } from 'antd';
 import logo from '../assets/logo/logo_no_bg.png';
-import { useNavigate } from 'react-router-dom';
-import { LOGIN, SIGNUP } from '../router/constants';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const items = [
   {
     label: 'sign In',
-    key: 'login',
+    key: '/login',
   },
   {
     label: 'sign Up',
-    key: 'signup',
+    key: '/signup',
   },
 ];
 
 const Header: React.FC = () => {
-  const [current, setCurrent] = useState('signup');
-  const { Header } = Layout;
   const navigate = useNavigate();
+  const location = useLocation();
+  const [current, setCurrent] = useState(location.pathname);
 
-  const onClick: MenuProps['onClick'] = (e) => {
+  const { Header } = Layout;
+
+  const onClickMenuItem: MenuProps['onClick'] = (e) => {
     setCurrent(e.key);
     navigate(e.key);
   };
 
+  const onClickLogo = () => {
+    navigate('/');
+    setCurrent('/');
+  };
+
   return (
     <Header style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <div style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
+      <div style={{ cursor: 'pointer' }} onClick={onClickLogo}>
         <img src={logo} alt="logo" style={{ height: '100%' }} />
       </div>
       <Menu
         items={items}
-        defaultSelectedKeys={[current]}
+        selectedKeys={[current]}
         theme="dark"
         mode="horizontal"
         style={{ fontSize: 20 }}
-        onClick={onClick}
+        onClick={onClickMenuItem}
       />
     </Header>
   );
