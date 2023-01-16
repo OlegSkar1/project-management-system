@@ -1,10 +1,10 @@
 import { Button, Form, Input, Typography } from 'antd';
-import './Login.scss';
+import login from './Login.module.scss';
 
 const Login = () => {
   return (
-    <Form className="login" wrapperCol={{ span: 24 }}>
-      <Typography.Title level={3} className="login_title">
+    <Form className={login.login} wrapperCol={{ span: 24 }}>
+      <Typography.Title level={3} className={login.login_title}>
         Log in Limi
       </Typography.Title>
       <Form.Item name="login">
@@ -15,7 +15,7 @@ const Login = () => {
       </Form.Item>
       <Form.Item wrapperCol={{ span: 24 }}>
         <Button block type="primary" htmlType="submit">
-          Submit
+          Sign In
         </Button>
       </Form.Item>
     </Form>

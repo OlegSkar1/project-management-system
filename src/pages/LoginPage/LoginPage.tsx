@@ -1,10 +1,10 @@
 import { Layout } from 'antd';
-import Login from '../../components/login/Login';
-import './LoginPage.scss';
+import Login from '../../components/Login/Login';
+import loginPage from './LoginPage.module.scss';
 
 const LoginPage = () => {
   return (
-    <Layout.Content className="LoginPage">
+    <Layout.Content className={loginPage.container}>
       <Login />
     </Layout.Content>
   );
