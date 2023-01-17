@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
 
-const ErrorPage = () => {
+export const ErrorPage = () => {
   const error = useRouteError();
   console.log(error);
 
@@ -30,5 +30,3 @@ const ErrorPage = () => {
   }
   return <div>error</div>;
 };
-
-export default ErrorPage;

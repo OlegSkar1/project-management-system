@@ -1,13 +1,14 @@
 import { Layout } from 'antd';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import { Footer } from '../../components/Footer';
+import { Header } from '../../components/Header';
+import layout from './Layout.module.scss';
 
-const LayoutPage: React.FC = () => {
+export const LayoutPage: React.FC = () => {
   return (
-    <Layout style={{ height: '100vh' }}>
-      <div style={{ flex: 1 }}>
+    <Layout className={layout.layout}>
+      <div className={layout.main}>
         <Header />
         <Layout>
           <Outlet />
@@ -19,5 +20,3 @@ const LayoutPage: React.FC = () => {
     </Layout>
   );
 };
-
-export default LayoutPage;

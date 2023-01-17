@@ -1,5 +1,5 @@
 import { ConfigProvider } from 'antd';
-import AppRouter from './router/AppRouter';
+import { AppRouter } from './router';
 
 const App: React.FC = () => {
   return (
