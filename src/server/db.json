@@ -9,26 +9,6 @@
       "email": "oleg",
       "password": "admin",
       "id": 2
-    },
-    {
-      "email": "olegs",
-      "password": "admin",
-      "id": 3
-    },
-    {
-      "email": "olegSkar",
-      "password": "admin",
-      "id": 4
-    },
-    {
-      "email": "user@example.com",
-      "password": "password",
-      "id": 5
-    },
-    {
-      "email": "user@exampleds.com",
-      "password": "password",
-      "id": 6
     }
   ]
 }

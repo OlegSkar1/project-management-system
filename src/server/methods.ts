@@ -20,11 +20,9 @@ export const signUp = async (user: IUser) => {
   const hasUser = _.findIndex(users, { email: user.email });
 
   if (hasUser === -1) {
-    const response = await axios.post<IUser>(BASE_URL + 'users', user, {
+    await axios.post<IUser>(BASE_URL + 'users', user, {
       headers: { 'Content-Type': 'application/json' },
     });
-    console.log(response.data);
-    return response.data;
   } else {
     throw new Response('', {
       status: 404,
