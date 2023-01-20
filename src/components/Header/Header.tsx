@@ -16,6 +16,13 @@ const items = [
   },
 ];
 
+const signout = [
+  {
+    label: 'Sign Out',
+    key: '/login',
+  },
+];
+
 export const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,6 +49,7 @@ export const Header: React.FC = () => {
           <img src={logo} alt="logo" style={{ height: '100%' }} />
         </div>
         <Menu
+          disabledOverflow={true}
           items={items}
           selectedKeys={[current]}
           theme="dark"

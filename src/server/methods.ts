@@ -9,7 +9,10 @@ interface IBody {
 }
 
 export const signIn = async ({ email, password }: IBody) => {
-  const res = await axios.get<IUser[]>(BASE_URL + `users/?email=${email}`);
+  const res = await axios.get<IUser[]>(
+    BASE_URL + `users/?email=${email}&_embed=dashboard`
+  );
+
   if (res.data.length > 0 && res.data[0].password === password) {
     return res.data[0];
   }

@@ -1,7 +1,7 @@
 import { Button, Form, Input, message, Typography } from 'antd';
 import { AxiosResponse } from 'axios';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SIGNUP } from '../../router/constants';
 import { signIn } from '../../server/methods';
 import styles from './Login.module.scss';
@@ -15,6 +15,10 @@ export const Login = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const fromPage = location.state?.from?.pathname || '/';
 
   const onFinish = (values: IFormData) => {
     setLoading(true);
@@ -23,6 +27,7 @@ export const Login = () => {
         const res = await signIn(values);
         localStorage.setItem('user', res.email);
         setLoading(false);
+        navigate(fromPage, { replace: true });
       } catch (error) {
         setLoading(false);
         const e = error as AxiosResponse;

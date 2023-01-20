@@ -18,5 +18,12 @@
       "name": "oleg",
       "id": 3
     }
+  ],
+  "dashboard": [
+    {
+      "userId": 1,
+      "id": 1,
+      "body": "test"
+    }
   ]
 }
