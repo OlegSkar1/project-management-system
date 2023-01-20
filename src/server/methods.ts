@@ -3,15 +3,20 @@ import { BASE_URL } from './constants';
 import { IUser } from './models';
 import _ from 'lodash';
 
-export const signIn = async (email: string) => {
+interface IBody {
+  email: string;
+  password: string;
+}
+
+export const signIn = async ({ email, password }: IBody) => {
   const res = await axios.get<IUser[]>(BASE_URL + `users/?email=${email}`);
-  if (res.data.length === 0) {
-    throw new Response('', {
-      status: 404,
-      statusText: 'user not found',
-    });
+  if (res.data.length > 0 && res.data[0].password === password) {
+    return res.data[0];
   }
-  return res.data[0];
+  throw new Response('', {
+    status: 404,
+    statusText: 'user not found',
+  });
 };
 
 export const signUp = async (user: IUser) => {

@@ -1,14 +1,22 @@
 {
   "users": [
     {
-      "email": "test@example.com",
-      "password": "test",
+      "email": "oleg@test.com",
+      "password": "olegG1",
+      "name": "oleg skarednov",
       "id": 1
     },
     {
-      "email": "oleg",
-      "password": "admin",
+      "email": "test@test.ru",
+      "password": "testT12",
+      "name": "oleg",
       "id": 2
+    },
+    {
+      "email": "olegskar@test.ru",
+      "password": "qweQwe1",
+      "name": "oleg",
+      "id": 3
     }
   ]
 }

@@ -7,6 +7,7 @@ import styles from './SignUp.module.scss';
 import { AxiosResponse } from 'axios';
 
 interface IFormData {
+  name: string;
   email: string;
   password: string;
 }
@@ -16,11 +17,16 @@ export const SignUp = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const onFinish = async (values: IFormData) => {
+  const onFinish = (values: IFormData) => {
     setLoading(true);
     setTimeout(async () => {
       try {
-        await signUp({ email: values.email, password: values.password });
+        await signUp({
+          email: values.email,
+          password: values.password,
+          name: values.name,
+        });
+        localStorage.setItem('user', values.email);
         messageApi.success('Registration successfully!');
         setLoading(false);
       } catch (error) {
