@@ -1,42 +1,33 @@
 import { Button, Form, Input, message, Typography } from 'antd';
-import { AxiosResponse } from 'axios';
-import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { SIGNUP } from '../../router/constants';
-import { signIn } from '../../server/methods';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
+import { setAsyncUser, setIsLoading } from '../../store/userSlice';
+import { DASHBOARD, SIGNUP } from '../../router/constants';
 import styles from './Login.module.scss';
-
-interface IFormData {
-  email: string;
-  password: string;
-}
+import { IUser } from '../../server/models';
 
 export const Login = () => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { isLoading, error, isAuth } = useAppSelector((state) => state.user);
 
-  const fromPage = location.state?.from?.pathname || '/';
-
-  const onFinish = (values: IFormData) => {
-    setLoading(true);
-    setTimeout(async () => {
-      try {
-        const res = await signIn(values);
-        localStorage.setItem('user', res.email);
-        setLoading(false);
-        navigate(fromPage, { replace: true });
-      } catch (error) {
-        setLoading(false);
-        const e = error as AxiosResponse;
-        messageApi.error(e.statusText);
-      }
-    }, 800);
+  const onFinish = async (values: IUser) => {
+    dispatch(setIsLoading(true));
+    setTimeout(() => {
+      dispatch(setAsyncUser(values));
+    }, 1000);
 
     form.resetFields();
   };
+
+  useEffect(() => {
+    error && messageApi.error(error);
+    isAuth && navigate(`../${DASHBOARD}`, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error, isAuth]);
 
   return (
     <>
@@ -78,7 +69,7 @@ export const Login = () => {
             type="primary"
             htmlType="submit"
             style={{ marginBottom: 15 }}
-            loading={loading}
+            loading={isLoading}
           >
             Sign In
           </Button>

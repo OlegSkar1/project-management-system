@@ -1,9 +1,11 @@
-import { Menu, MenuProps } from 'antd';
-import { Layout } from 'antd';
+import { Menu, MenuProps, Layout, Space, Row } from 'antd';
 import logo from '../../assets/logo/logo_no_bg.png';
 import styles from './Header.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { LOGIN } from '../../router/constants';
+import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
+import { logout } from '../../store/userSlice';
 
 const items = [
   {
@@ -13,6 +15,13 @@ const items = [
   {
     label: 'sign Up',
     key: '/signup',
+  },
+];
+
+const authItems = [
+  {
+    label: 'Dashboard',
+    key: '/dashboard',
   },
 ];
 
@@ -27,6 +36,8 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [current, setCurrent] = useState(location.pathname);
+  const { isAuth, user } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   const { Header } = Layout;
 
@@ -38,6 +49,11 @@ export const Header: React.FC = () => {
     navigate('/');
   };
 
+  const signoutHandler = () => {
+    dispatch(logout());
+    navigate(LOGIN);
+  };
+
   useEffect(() => {
     setCurrent(location.pathname);
   }, [location.pathname]);
@@ -45,18 +61,52 @@ export const Header: React.FC = () => {
   return (
     <div className="wrapper">
       <Header className={styles.header}>
-        <div style={{ cursor: 'pointer' }} onClick={onClickLogo}>
-          <img src={logo} alt="logo" style={{ height: '100%' }} />
-        </div>
-        <Menu
-          disabledOverflow={true}
-          items={items}
-          selectedKeys={[current]}
-          theme="dark"
-          mode="horizontal"
-          style={{ fontSize: 20 }}
-          onClick={onClickMenuItem}
-        />
+        {isAuth ? (
+          <Row style={{ cursor: 'pointer' }}>
+            <div style={{ height: '64px' }} onClick={onClickLogo}>
+              <img src={logo} alt="logo" style={{ height: '100%' }} />
+            </div>
+            <Menu
+              disabledOverflow
+              items={authItems}
+              theme="dark"
+              mode="horizontal"
+              style={{ fontSize: 20 }}
+              onClick={onClickMenuItem}
+            />
+          </Row>
+        ) : (
+          <div style={{ cursor: 'pointer' }} onClick={onClickLogo}>
+            <img src={logo} alt="logo" style={{ height: '100%' }} />
+          </div>
+        )}
+
+        {isAuth ? (
+          <Space>
+            <div style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 20 }}>
+              {user.name}
+            </div>
+            <Menu
+              disabledOverflow={true}
+              items={signout}
+              selectable={false}
+              theme="dark"
+              mode="horizontal"
+              style={{ fontSize: 20 }}
+              onClick={signoutHandler}
+            />
+          </Space>
+        ) : (
+          <Menu
+            disabledOverflow={true}
+            items={items}
+            selectedKeys={[current]}
+            theme="dark"
+            mode="horizontal"
+            style={{ fontSize: 20 }}
+            onClick={onClickMenuItem}
+          />
+        )}
       </Header>
     </div>
   );

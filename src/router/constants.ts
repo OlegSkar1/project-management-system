@@ -1,3 +1,3 @@
 export const LOGIN = 'login';
 export const SIGNUP = 'signup';
-export const DASHBOARD = 'dashboard/:userId';
+export const DASHBOARD = 'dashboard';

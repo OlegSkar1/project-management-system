@@ -1,19 +1,22 @@
 import { FC } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 type Props = {
+  isAuth: boolean;
+  redirectPath?: string;
   children: JSX.Element;
 };
 
-const RequireAuth: FC<Props> = ({ children }) => {
-  const location = useLocation();
-  const user = localStorage.getItem('user') || '';
-
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location }} />;
+const RequireAuth: FC<Props> = ({
+  isAuth,
+  redirectPath = '/login',
+  children,
+}) => {
+  if (!isAuth) {
+    return <Navigate to={redirectPath} replace />;
   }
 
-  return children;
+  return children ? children : <Outlet />;
 };
 
 export { RequireAuth };

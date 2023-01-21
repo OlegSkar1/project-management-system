@@ -26,7 +26,7 @@ export const SignUp = () => {
           password: values.password,
           name: values.name,
         });
-        localStorage.setItem('user', values.email);
+        localStorage.setItem('user', values.name);
         messageApi.success('Registration successfully!');
         setLoading(false);
       } catch (error) {
@@ -42,12 +42,7 @@ export const SignUp = () => {
   return (
     <>
       {contextHolder}
-      <Form
-        form={form}
-        className={styles.wrapper}
-        wrapperCol={{ span: 24 }}
-        onFinish={onFinish}
-      >
+      <Form form={form} className={styles.wrapper} wrapperCol={{ span: 24 }} onFinish={onFinish}>
         <Typography.Title level={3} className={styles.login_title}>
           Sign up for Limy
         </Typography.Title>
@@ -93,8 +88,7 @@ export const SignUp = () => {
             },
             {
               pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/,
-              message:
-                'Password must have 1 uppercase letter, 1 lowercase letter and 1 number',
+              message: 'Password must have 1 uppercase letter, 1 lowercase letter and 1 number',
             },
             {
               min: 6,
@@ -118,9 +112,7 @@ export const SignUp = () => {
                 if (!value || getFieldValue('password') === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(
-                  new Error('The two passwords that you entered do not match!')
-                );
+                return Promise.reject(new Error('The two passwords that you entered do not match!'));
               },
             }),
           ]}
@@ -128,13 +120,7 @@ export const SignUp = () => {
           <Input.Password placeholder="confirm password" />
         </Form.Item>
         <Form.Item wrapperCol={{ span: 24 }}>
-          <Button
-            block
-            loading={loading}
-            type="primary"
-            htmlType="submit"
-            style={{ marginBottom: 15 }}
-          >
+          <Button block loading={loading} type="primary" htmlType="submit" style={{ marginBottom: 15 }}>
             Register
           </Button>
           <div className={styles['text-align']}>

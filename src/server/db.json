@@ -17,6 +17,12 @@
       "password": "qweQwe1",
       "name": "oleg",
       "id": 3
+    },
+    {
+      "email": "admon@admon.ru",
+      "password": "Admon1",
+      "name": "admon",
+      "id": 4
     }
   ],
   "dashboard": [

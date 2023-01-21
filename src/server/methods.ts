@@ -3,12 +3,7 @@ import { BASE_URL } from './constants';
 import { IUser } from './models';
 import _ from 'lodash';
 
-interface IBody {
-  email: string;
-  password: string;
-}
-
-export const signIn = async ({ email, password }: IBody) => {
+export const signIn = async ({ email, password }: IUser) => {
   const res = await axios.get<IUser[]>(
     BASE_URL + `users/?email=${email}&_embed=dashboard`
   );
