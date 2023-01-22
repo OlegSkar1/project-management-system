@@ -1,9 +1,4 @@
-import {
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-} from 'react-router-dom';
+import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
 import { useEffect } from 'react';
 import { RequireAuth } from '../hoc/RequireAuth';
 import { DashboardPage } from '../pages/Dashboard';
@@ -19,13 +14,16 @@ import { IUser } from '../server/models';
 
 export const AppRouter: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isAuth } = useAppSelector((state) => state.user);
+  const { isAuth, user } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     if (localStorage.getItem('auth')) {
-      dispatch(
-        setUser({ name: localStorage.getItem('username' || '') } as IUser)
-      );
+      const storageUser = localStorage.getItem('user');
+
+      if (storageUser) {
+        dispatch(setUser(JSON.parse(storageUser) as IUser));
+      }
+
       dispatch(setIsAuth(true));
     }
   }, [dispatch]);
@@ -38,9 +36,9 @@ export const AppRouter: React.FC = () => {
           <Route path={LOGIN} element={<LoginPage />} />
           <Route path={SIGNUP} element={<SignUpPage />} />
           <Route
-            path={DASHBOARD}
+            path={`:id/${DASHBOARD}`}
             element={
-              <RequireAuth isAuth={isAuth}>
+              <RequireAuth isAuth={isAuth} id={user.id}>
                 <DashboardPage />
               </RequireAuth>
             }

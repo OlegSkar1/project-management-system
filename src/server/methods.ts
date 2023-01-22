@@ -3,10 +3,8 @@ import { BASE_URL } from './constants';
 import { IUser } from './models';
 import _ from 'lodash';
 
-export const signIn = async ({ email, password }: IUser) => {
-  const res = await axios.get<IUser[]>(
-    BASE_URL + `users/?email=${email}&_embed=dashboard`
-  );
+export const signIn = async ({ email, password }: IUser): Promise<IUser> => {
+  const res = await axios.get<IUser[]>(BASE_URL + `users/?email=${email}&_embed=dashboard`);
 
   if (res.data.length > 0 && res.data[0].password === password) {
     return res.data[0];

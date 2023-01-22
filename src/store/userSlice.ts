@@ -1,9 +1,4 @@
-import {
-  createSlice,
-  PayloadAction,
-  createAsyncThunk,
-  AnyAction,
-} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk, AnyAction } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import { AppDispatch } from '.';
 import { signIn } from '../server/methods';
@@ -27,42 +22,39 @@ const initialState: UserState = {
   },
 };
 
-export const setAsyncUser = createAsyncThunk<
-  IUser,
-  IUser,
-  { rejectValue: string; dispatch: AppDispatch }
->('user/setAsyncUser', async (user, { rejectWithValue, dispatch }) => {
-  dispatch(setIsLoading(true));
+export const setAsyncUser = createAsyncThunk<IUser, IUser, { rejectValue: string; dispatch: AppDispatch }>(
+  'user/setAsyncUser',
+  async (user, { rejectWithValue, dispatch }) => {
+    dispatch(setIsLoading(true));
 
-  try {
-    const res = await signIn(user);
-    console.log(res);
-    if (res.name) {
-      localStorage.setItem('username', res.name);
-      localStorage.setItem('auth', 'true');
-      dispatch(setUser(res));
-      dispatch(setIsAuth(true));
+    try {
+      const res = await signIn(user);
+      if (res.name) {
+        localStorage.setItem('user', JSON.stringify(res));
+        localStorage.setItem('auth', 'true');
+        dispatch(setUser(res));
+        dispatch(setIsAuth(true));
+      }
+
+      dispatch(setIsLoading(false));
+      return res;
+    } catch (error) {
+      const e = error as AxiosResponse;
+      return rejectWithValue(e.statusText);
     }
-
-    dispatch(setIsLoading(false));
-    return res;
-  } catch (error) {
-    const e = error as AxiosResponse;
-    return rejectWithValue(e.statusText);
   }
-});
+);
 
-export const logout = createAsyncThunk<
-  void,
-  undefined,
-  { dispatch: AppDispatch }
->('user/logout', async (_, { dispatch }) => {
-  localStorage.removeItem('username');
-  localStorage.removeItem('auth');
-  dispatch(setUser({} as IUser));
-  dispatch(setIsAuth(false));
-  dispatch(setError(null));
-});
+export const logout = createAsyncThunk<void, undefined, { dispatch: AppDispatch }>(
+  'user/logout',
+  async (_, { dispatch }) => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('auth');
+    dispatch(setUser({} as IUser));
+    dispatch(setIsAuth(false));
+    dispatch(setError(null));
+  }
+);
 
 const userSlice = createSlice({
   name: 'user',

@@ -42,7 +42,7 @@ export const Header: React.FC = () => {
   const { Header } = Layout;
 
   const onClickMenuItem: MenuProps['onClick'] = (e) => {
-    navigate(e.key);
+    isAuth ? navigate(user.id + e.key) : navigate(e.key);
   };
 
   const onClickLogo = () => {
@@ -83,9 +83,7 @@ export const Header: React.FC = () => {
 
         {isAuth ? (
           <Space>
-            <div style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 20 }}>
-              {user.name}
-            </div>
+            <div style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 20 }}>{user.name}</div>
             <Menu
               disabledOverflow={true}
               items={signout}

@@ -12,7 +12,7 @@ export const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isLoading, error, isAuth } = useAppSelector((state) => state.user);
+  const { isLoading, error, isAuth, user } = useAppSelector((state) => state.user);
 
   const onFinish = async (values: IUser) => {
     dispatch(setIsLoading(true));
@@ -25,19 +25,14 @@ export const Login = () => {
 
   useEffect(() => {
     error && messageApi.error(error);
-    isAuth && navigate(`../${DASHBOARD}`, { replace: true });
+    isAuth && navigate(`../${user.id}/${DASHBOARD}`, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, isAuth]);
 
   return (
     <>
       {contextHolder}
-      <Form
-        form={form}
-        className={styles.login}
-        wrapperCol={{ span: 24 }}
-        onFinish={onFinish}
-      >
+      <Form form={form} className={styles.login} wrapperCol={{ span: 24 }} onFinish={onFinish}>
         <Typography.Title level={3} className={styles.login_title}>
           Log in Limi
         </Typography.Title>
@@ -64,13 +59,7 @@ export const Login = () => {
           <Input.Password placeholder="enter password" />
         </Form.Item>
         <Form.Item wrapperCol={{ span: 24 }}>
-          <Button
-            block
-            type="primary"
-            htmlType="submit"
-            style={{ marginBottom: 15 }}
-            loading={isLoading}
-          >
+          <Button block type="primary" htmlType="submit" style={{ marginBottom: 15 }} loading={isLoading}>
             Sign In
           </Button>
           <div className={styles['text-align']}>
