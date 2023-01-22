@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk, AnyAction } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import { AppDispatch } from '.';
-import { signIn } from '../server/methods';
+import { signIn, signUp } from '../server/methods';
 import { IUser } from '../server/models';
 
 type UserState = {
@@ -22,8 +22,25 @@ const initialState: UserState = {
   },
 };
 
-export const setAsyncUser = createAsyncThunk<IUser, IUser, { rejectValue: string; dispatch: AppDispatch }>(
-  'user/setAsyncUser',
+export const signUpUser = createAsyncThunk<undefined, IUser, { rejectValue: string; dispatch: AppDispatch }>(
+  'user/signUpUser',
+  async (user, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await signUp(user);
+
+      dispatch(setUser(res));
+      dispatch(setIsAuth(true));
+      localStorage.setItem('user', JSON.stringify(res));
+      localStorage.setItem('auth', 'true');
+    } catch (error) {
+      const e = error as AxiosResponse;
+      return rejectWithValue(e.statusText);
+    }
+  }
+);
+
+export const login = createAsyncThunk<undefined, IUser, { rejectValue: string; dispatch: AppDispatch }>(
+  'user/login',
   async (user, { rejectWithValue, dispatch }) => {
     dispatch(setIsLoading(true));
 
@@ -37,7 +54,6 @@ export const setAsyncUser = createAsyncThunk<IUser, IUser, { rejectValue: string
       }
 
       dispatch(setIsLoading(false));
-      return res;
     } catch (error) {
       const e = error as AxiosResponse;
       return rejectWithValue(e.statusText);

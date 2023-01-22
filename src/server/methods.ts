@@ -15,15 +15,16 @@ export const signIn = async ({ email, password }: IUser): Promise<IUser> => {
   });
 };
 
-export const signUp = async (user: IUser) => {
+export const signUp = async (user: IUser): Promise<IUser> => {
   const users = await getUsers();
 
   const hasUser = _.findIndex(users, { email: user.email });
 
   if (hasUser === -1) {
-    await axios.post<IUser>(BASE_URL + 'users', user, {
+    const res = await axios.post<IUser>(BASE_URL + 'users', user, {
       headers: { 'Content-Type': 'application/json' },
     });
+    return res.data;
   } else {
     throw new Response('', {
       status: 404,

@@ -2,7 +2,7 @@ import { Button, Form, Input, message, Typography } from 'antd';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
-import { setAsyncUser, setIsLoading } from '../../store/userSlice';
+import { login, setIsLoading } from '../../store/userSlice';
 import { DASHBOARD, SIGNUP } from '../../router/constants';
 import styles from './Login.module.scss';
 import { IUser } from '../../server/models';
@@ -17,7 +17,7 @@ export const Login = () => {
   const onFinish = async (values: IUser) => {
     dispatch(setIsLoading(true));
     setTimeout(() => {
-      dispatch(setAsyncUser(values));
+      dispatch(login(values));
     }, 1000);
 
     form.resetFields();
