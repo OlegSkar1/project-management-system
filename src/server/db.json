@@ -1,41 +1,30 @@
 {
   "users": [
     {
+      "name": "oleg",
       "email": "oleg@test.com",
-      "password": "olegG1",
-      "name": "oleg skarednov",
+      "password": "testT1",
       "id": 1
     },
     {
-      "email": "test@test.ru",
-      "password": "testT12",
-      "name": "oleg",
-      "id": 2
-    },
-    {
-      "email": "olegskar@test.ru",
-      "password": "qweQwe1",
-      "name": "oleg",
-      "id": 3
-    },
-    {
-      "email": "admon@admon.ru",
-      "password": "Admon1",
-      "name": "admon",
-      "id": 4
-    },
-    {
-      "email": "test@test.com",
+      "name": "anje",
+      "email": "anje@test.com",
       "password": "testT1",
-      "name": "test user",
-      "id": 5
+      "id": 2
     }
   ],
-  "dashboard": [
+  "dashboards": [
     {
+      "title": "",
       "userId": 1,
-      "id": 1,
-      "body": "test"
+      "users": [],
+      "id": 1
+    },
+    {
+      "title": "",
+      "userId": 2,
+      "users": [],
+      "id": 2
     }
   ]
 }

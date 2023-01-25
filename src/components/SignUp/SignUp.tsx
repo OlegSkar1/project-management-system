@@ -1,48 +1,48 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Button, Form, Input, message, Typography } from 'antd';
-import { Link } from 'react-router-dom';
-import { LOGIN } from '../../router/constants';
-import { signUp } from '../../server/methods';
+import { Link, useNavigate } from 'react-router-dom';
+import { DASHBOARD, LOGIN } from '../../router/constants';
 import styles from './SignUp.module.scss';
-import { AxiosResponse } from 'axios';
-
-interface IFormData {
-  name: string;
-  email: string;
-  password: string;
-}
+import { IUser } from '../../server/models';
+import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
+import { setError, setIsLoading, signUpUser } from '../../store/userSlice';
 
 export const SignUp = () => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const dispatch = useAppDispatch();
+  const { isLoading, isAuth, error, user } = useAppSelector(
+    (state) => state.user
+  );
+  const navigate = useNavigate();
 
-  const onFinish = (values: IFormData) => {
-    setLoading(true);
+  const onFinish = (values: IUser) => {
+    dispatch(setIsLoading(true));
     setTimeout(async () => {
-      try {
-        await signUp({
-          email: values.email,
-          password: values.password,
-          name: values.name,
-        });
-        localStorage.setItem('user', values.name);
-        messageApi.success('Registration successfully!');
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        const e = error as AxiosResponse;
-        messageApi.warning(e.statusText);
-      }
+      dispatch(signUpUser(values));
     }, 2000);
 
     form.resetFields();
   };
 
+  useEffect(() => {
+    if (error) {
+      messageApi.warning(error);
+      dispatch(setError(null));
+    }
+    isAuth && navigate(`../${user.id}/${DASHBOARD}`, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuth, error]);
+
   return (
     <>
       {contextHolder}
-      <Form form={form} className={styles.wrapper} wrapperCol={{ span: 24 }} onFinish={onFinish}>
+      <Form
+        form={form}
+        className={styles.wrapper}
+        wrapperCol={{ span: 24 }}
+        onFinish={onFinish}
+      >
         <Typography.Title level={3} className={styles.login_title}>
           Sign up for Limy
         </Typography.Title>
@@ -88,7 +88,8 @@ export const SignUp = () => {
             },
             {
               pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/,
-              message: 'Password must have 1 uppercase letter, 1 lowercase letter and 1 number',
+              message:
+                'Password must have 1 uppercase letter, 1 lowercase letter and 1 number',
             },
             {
               min: 6,
@@ -112,7 +113,9 @@ export const SignUp = () => {
                 if (!value || getFieldValue('password') === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                return Promise.reject(
+                  new Error('The two passwords that you entered do not match!')
+                );
               },
             }),
           ]}
@@ -120,7 +123,13 @@ export const SignUp = () => {
           <Input.Password placeholder="confirm password" />
         </Form.Item>
         <Form.Item wrapperCol={{ span: 24 }}>
-          <Button block loading={loading} type="primary" htmlType="submit" style={{ marginBottom: 15 }}>
+          <Button
+            block
+            loading={isLoading}
+            type="primary"
+            htmlType="submit"
+            style={{ marginBottom: 15 }}
+          >
             Register
           </Button>
           <div className={styles['text-align']}>

@@ -58,6 +58,8 @@ export const Header: React.FC = () => {
     setCurrent(location.pathname);
   }, [location.pathname]);
 
+  console.log(user);
+
   return (
     <div className="wrapper">
       <Header className={styles.header}>
@@ -81,9 +83,11 @@ export const Header: React.FC = () => {
           </div>
         )}
 
-        {isAuth ? (
+        {isAuth && user.name.length > 0 ? (
           <Space>
-            <div style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 20 }}>{user.name}</div>
+            <div style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 20 }}>
+              {user.name}
+            </div>
             <Menu
               disabledOverflow={true}
               items={signout}

@@ -1,4 +1,9 @@
-import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from 'react-router-dom';
 import { useEffect } from 'react';
 import { RequireAuth } from '../hoc/RequireAuth';
 import { DashboardPage } from '../pages/Dashboard';
@@ -14,7 +19,7 @@ import { IUser } from '../server/models';
 
 export const AppRouter: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isAuth, user } = useAppSelector((state) => state.user);
+  const { isAuth } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     if (localStorage.getItem('auth')) {
@@ -33,12 +38,12 @@ export const AppRouter: React.FC = () => {
       <Route path="/" element={<LayoutPage />}>
         <Route errorElement={<ErrorPage />}>
           <Route index element={<StartPage />} />
-          <Route path={LOGIN} element={<LoginPage />} />
           <Route path={SIGNUP} element={<SignUpPage />} />
+          <Route path={LOGIN} element={<LoginPage />} />
           <Route
             path={`:id/${DASHBOARD}`}
             element={
-              <RequireAuth isAuth={isAuth} id={user.id}>
+              <RequireAuth isAuth={isAuth}>
                 <DashboardPage />
               </RequireAuth>
             }

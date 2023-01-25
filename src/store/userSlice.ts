@@ -1,4 +1,9 @@
-import { createSlice, PayloadAction, createAsyncThunk, AnyAction } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  PayloadAction,
+  createAsyncThunk,
+  AnyAction,
+} from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import { AppDispatch } from '.';
 import { signIn, signUp } from '../server/methods';
@@ -22,55 +27,64 @@ const initialState: UserState = {
   },
 };
 
-export const signUpUser = createAsyncThunk<undefined, IUser, { rejectValue: string; dispatch: AppDispatch }>(
-  'user/signUpUser',
-  async (user, { rejectWithValue, dispatch }) => {
-    try {
-      const res = await signUp(user);
+export const signUpUser = createAsyncThunk<
+  undefined,
+  IUser,
+  { rejectValue: string; dispatch: AppDispatch }
+>('user/signUpUser', async (user, { rejectWithValue, dispatch }) => {
+  try {
+    dispatch(setError(null));
 
+    const res = await signUp(user);
+
+    if (res.name) {
       dispatch(setUser(res));
       dispatch(setIsAuth(true));
       localStorage.setItem('user', JSON.stringify(res));
       localStorage.setItem('auth', 'true');
-    } catch (error) {
-      const e = error as AxiosResponse;
-      return rejectWithValue(e.statusText);
-    }
-  }
-);
-
-export const login = createAsyncThunk<undefined, IUser, { rejectValue: string; dispatch: AppDispatch }>(
-  'user/login',
-  async (user, { rejectWithValue, dispatch }) => {
-    dispatch(setIsLoading(true));
-
-    try {
-      const res = await signIn(user);
-      if (res.name) {
-        localStorage.setItem('user', JSON.stringify(res));
-        localStorage.setItem('auth', 'true');
-        dispatch(setUser(res));
-        dispatch(setIsAuth(true));
-      }
-
       dispatch(setIsLoading(false));
-    } catch (error) {
-      const e = error as AxiosResponse;
-      return rejectWithValue(e.statusText);
     }
+  } catch (error) {
+    dispatch(setIsLoading(false));
+    const e = error as AxiosResponse;
+    return rejectWithValue(e.statusText);
   }
-);
+});
 
-export const logout = createAsyncThunk<void, undefined, { dispatch: AppDispatch }>(
-  'user/logout',
-  async (_, { dispatch }) => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('auth');
-    dispatch(setUser({} as IUser));
-    dispatch(setIsAuth(false));
+export const login = createAsyncThunk<
+  undefined,
+  IUser,
+  { rejectValue: string; dispatch: AppDispatch }
+>('user/login', async (user, { rejectWithValue, dispatch }) => {
+  try {
     dispatch(setError(null));
+    const res = await signIn(user);
+    if (res.name) {
+      localStorage.setItem('user', JSON.stringify(res));
+      localStorage.setItem('auth', 'true');
+      dispatch(setUser(res));
+      dispatch(setIsAuth(true));
+    }
+
+    dispatch(setIsLoading(false));
+  } catch (error) {
+    dispatch(setIsLoading(false));
+    const e = error as AxiosResponse;
+    return rejectWithValue(e.statusText);
   }
-);
+});
+
+export const logout = createAsyncThunk<
+  void,
+  undefined,
+  { dispatch: AppDispatch }
+>('user/logout', async (_, { dispatch }) => {
+  localStorage.removeItem('user');
+  localStorage.removeItem('auth');
+  dispatch(setUser({} as IUser));
+  dispatch(setIsAuth(false));
+  dispatch(setError(null));
+});
 
 const userSlice = createSlice({
   name: 'user',

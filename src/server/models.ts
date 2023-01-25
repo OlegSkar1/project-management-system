@@ -1,14 +1,14 @@
 export interface IUser {
-  id?: string;
+  id?: number;
   email: string;
   password: string;
   name: string;
 }
 
 export interface IBoards {
-  id?: string;
+  id?: number;
   title: string;
-  owner: string;
+  userId: number;
   users: string[];
 }
 

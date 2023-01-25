@@ -1,17 +1,20 @@
 import { FC } from 'react';
-import { Navigate, Outlet, useParams } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 type Props = {
   isAuth: boolean;
-  id?: string;
+  id?: number;
   redirectPath?: string;
   children: JSX.Element;
 };
 
-const RequireAuth: FC<Props> = ({ isAuth, id, redirectPath = '/login', children }) => {
-  const params = useParams();
-
-  if (!isAuth && id !== params.id) {
+const RequireAuth: FC<Props> = ({
+  isAuth,
+  id,
+  redirectPath = '/login',
+  children,
+}) => {
+  if (!isAuth) {
     return <Navigate to={redirectPath} replace />;
   }
 

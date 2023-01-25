@@ -2,7 +2,7 @@ import { Button, Form, Input, message, Typography } from 'antd';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/rtkHooks';
-import { login, setIsLoading } from '../../store/userSlice';
+import { login, setError, setIsLoading } from '../../store/userSlice';
 import { DASHBOARD, SIGNUP } from '../../router/constants';
 import styles from './Login.module.scss';
 import { IUser } from '../../server/models';
@@ -12,7 +12,9 @@ export const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isLoading, error, isAuth, user } = useAppSelector((state) => state.user);
+  const { isLoading, error, isAuth, user } = useAppSelector(
+    (state) => state.user
+  );
 
   const onFinish = async (values: IUser) => {
     dispatch(setIsLoading(true));
@@ -24,7 +26,10 @@ export const Login = () => {
   };
 
   useEffect(() => {
-    error && messageApi.error(error);
+    if (error) {
+      messageApi.error(error);
+      dispatch(setError(null));
+    }
     isAuth && navigate(`../${user.id}/${DASHBOARD}`, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, isAuth]);
@@ -32,7 +37,12 @@ export const Login = () => {
   return (
     <>
       {contextHolder}
-      <Form form={form} className={styles.login} wrapperCol={{ span: 24 }} onFinish={onFinish}>
+      <Form
+        form={form}
+        className={styles.login}
+        wrapperCol={{ span: 24 }}
+        onFinish={onFinish}
+      >
         <Typography.Title level={3} className={styles.login_title}>
           Log in Limi
         </Typography.Title>
@@ -59,7 +69,13 @@ export const Login = () => {
           <Input.Password placeholder="enter password" />
         </Form.Item>
         <Form.Item wrapperCol={{ span: 24 }}>
-          <Button block type="primary" htmlType="submit" style={{ marginBottom: 15 }} loading={isLoading}>
+          <Button
+            block
+            type="primary"
+            htmlType="submit"
+            style={{ marginBottom: 15 }}
+            loading={isLoading}
+          >
             Sign In
           </Button>
           <div className={styles['text-align']}>
