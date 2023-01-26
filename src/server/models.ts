@@ -13,10 +13,10 @@ export interface IBoards {
 }
 
 export interface Column {
-  id?: string;
+  id?: number;
   title: string;
   order: number;
-  boardId: string;
+  boardId: number;
 }
 
 export interface IFile {

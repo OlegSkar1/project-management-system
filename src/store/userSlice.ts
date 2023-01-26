@@ -7,13 +7,14 @@ import {
 import { AxiosResponse } from 'axios';
 import { AppDispatch } from '.';
 import { signIn, signUp } from '../server/methods';
-import { IUser } from '../server/models';
+import { IBoards, IUser } from '../server/models';
 
 type UserState = {
   isAuth: boolean;
   user: IUser;
   isLoading: boolean;
   error: string | null;
+  board: IBoards;
 };
 
 const initialState: UserState = {
@@ -25,6 +26,11 @@ const initialState: UserState = {
     email: '',
     password: '',
   },
+  board: {
+    title: '',
+    userId: 0,
+    users: [],
+  },
 };
 
 export const signUpUser = createAsyncThunk<
@@ -35,12 +41,14 @@ export const signUpUser = createAsyncThunk<
   try {
     dispatch(setError(null));
 
-    const res = await signUp(user);
+    const [resUser, resBoard] = await signUp(user);
 
-    if (res.name) {
-      dispatch(setUser(res));
+    if (resUser.name) {
+      dispatch(setUser(resUser));
+      dispatch(setBoard(resBoard));
       dispatch(setIsAuth(true));
-      localStorage.setItem('user', JSON.stringify(res));
+      localStorage.setItem('user', JSON.stringify(resUser));
+      localStorage.setItem('board', JSON.stringify(resBoard));
       localStorage.setItem('auth', 'true');
       dispatch(setIsLoading(false));
     }
@@ -81,7 +89,9 @@ export const logout = createAsyncThunk<
 >('user/logout', async (_, { dispatch }) => {
   localStorage.removeItem('user');
   localStorage.removeItem('auth');
+  localStorage.removeItem('board');
   dispatch(setUser({} as IUser));
+  dispatch(setBoard({} as IBoards));
   dispatch(setIsAuth(false));
   dispatch(setError(null));
 });
@@ -92,6 +102,9 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
+    },
+    setBoard: (state, action: PayloadAction<IBoards>) => {
+      state.board = action.payload;
     },
     setIsAuth: (state, action: PayloadAction<boolean>) => {
       state.isAuth = action.payload;
@@ -113,7 +126,8 @@ const userSlice = createSlice({
   },
 });
 
-export const { setIsAuth, setIsLoading, setError, setUser } = userSlice.actions;
+export const { setIsAuth, setIsLoading, setError, setUser, setBoard } =
+  userSlice.actions;
 export default userSlice.reducer;
 
 function isError(action: AnyAction) {

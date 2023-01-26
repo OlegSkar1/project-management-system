@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { BASE_URL } from './constants';
 import { IBoards, IUser } from './models';
-import _ from 'lodash';
 
 export const signIn = async ({ email, password }: IUser): Promise<IUser> => {
   const res = await axios.get<IUser[]>(
@@ -17,40 +16,15 @@ export const signIn = async ({ email, password }: IUser): Promise<IUser> => {
   });
 };
 
-export const signUp = async (user: IUser): Promise<IUser> => {
-  const users = await getUsers();
+export const signUp = async (user: IUser): Promise<[IUser, IBoards]> => {
+  const currUser = await getUser(user.email);
 
-  const hasUser = _.findIndex(users, { email: user.email });
+  if (currUser.length === 0) {
+    const resUser = await addUser(user);
 
-  if (hasUser === -1) {
-    const res = await axios.post<IUser>(
-      BASE_URL + 'users',
-      {
-        name: user.name,
-        email: user.email,
-        password: user.password,
-      },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+    const board = await addBoard(resUser.id);
 
-    await axios.post<IBoards>(
-      BASE_URL + 'dashboards',
-      {
-        title: '',
-        userId: res.data.id,
-        users: [],
-      },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
-
-    const result = await axios.get<IUser>(
-      BASE_URL + `users/?email=${user.email}&_embed=dashboards`
-    );
-    return result.data;
+    return [resUser, board];
   } else {
     throw new Response('', {
       status: 404,
@@ -61,4 +35,39 @@ export const signUp = async (user: IUser): Promise<IUser> => {
 
 export const getUsers = async () => {
   return (await axios.get<IUser[]>(BASE_URL + 'users')).data;
+};
+
+export const getUser = async (email: string) => {
+  return (await axios.get<IUser[]>(`${BASE_URL}users?email=${email}`)).data;
+};
+
+export const addUser = async (user: IUser) => {
+  const res = await axios.post<IUser>(
+    BASE_URL + 'users',
+    {
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    },
+    {
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
+  return res.data;
+};
+
+export const addBoard = async (id?: number) => {
+  const board = await axios.post<IBoards>(
+    BASE_URL + 'dashboards',
+    {
+      title: 'Your first board',
+      userId: id,
+      users: [],
+    },
+    {
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
+
+  return board.data;
 };

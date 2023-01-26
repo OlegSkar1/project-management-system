@@ -58,8 +58,6 @@ export const Header: React.FC = () => {
     setCurrent(location.pathname);
   }, [location.pathname]);
 
-  console.log(user);
-
   return (
     <div className="wrapper">
       <Header className={styles.header}>

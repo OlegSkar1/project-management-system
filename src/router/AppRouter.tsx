@@ -14,8 +14,8 @@ import { SignUpPage } from '../pages/SignUpPage';
 import { StartPage } from '../pages/StartPage';
 import { DASHBOARD, LOGIN, SIGNUP } from './constants';
 import { useAppDispatch, useAppSelector } from '../hooks/rtkHooks';
-import { setIsAuth, setUser } from '../store/userSlice';
-import { IUser } from '../server/models';
+import { setBoard, setIsAuth, setUser } from '../store/userSlice';
+import { IBoards, IUser } from '../server/models';
 
 export const AppRouter: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -24,9 +24,13 @@ export const AppRouter: React.FC = () => {
   useEffect(() => {
     if (localStorage.getItem('auth')) {
       const storageUser = localStorage.getItem('user');
+      const storageBoard = localStorage.getItem('board');
 
       if (storageUser) {
         dispatch(setUser(JSON.parse(storageUser) as IUser));
+      }
+      if (storageBoard) {
+        dispatch(setBoard(JSON.parse(storageBoard) as IBoards));
       }
 
       dispatch(setIsAuth(true));

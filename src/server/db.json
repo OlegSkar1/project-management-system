@@ -11,20 +11,63 @@
       "email": "anje@test.com",
       "password": "testT1",
       "id": 2
+    },
+    {
+      "name": "test",
+      "email": "test@test.com",
+      "password": "testT1",
+      "id": 3
+    },
+    {
+      "name": "user",
+      "email": "user@test.com",
+      "password": "testT1",
+      "id": 4
     }
   ],
   "dashboards": [
     {
-      "title": "",
+      "title": "board1",
       "userId": 1,
-      "users": [],
+      "users": [
+        "anje@test.com",
+        "test@test.com"
+      ],
       "id": 1
     },
     {
-      "title": "",
+      "title": "board2",
       "userId": 2,
-      "users": [],
+      "users": [
+        "test@test.com"
+      ],
       "id": 2
+    },
+    {
+      "title": "board3",
+      "userId": 3,
+      "users": [],
+      "id": 3
+    },
+    {
+      "title": "Your first board",
+      "userId": 4,
+      "users": [],
+      "id": 4
+    }
+  ],
+  "columns": [
+    {
+      "id": 1,
+      "title": "toDo",
+      "order": 0,
+      "dashboardId": 1
+    },
+    {
+      "id": 2,
+      "title": "work",
+      "order": 1,
+      "dashboardId": 2
     }
   ]
 }
