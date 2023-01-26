@@ -66,11 +66,13 @@ export const login = createAsyncThunk<
 >('user/login', async (user, { rejectWithValue, dispatch }) => {
   try {
     dispatch(setError(null));
-    const res = await signIn(user);
-    if (res.name) {
-      localStorage.setItem('user', JSON.stringify(res));
+    const [dbUser, dbBoards] = await signIn(user);
+    if (dbUser.name) {
+      localStorage.setItem('user', JSON.stringify(dbUser));
+      localStorage.setItem('board', JSON.stringify(dbBoards));
       localStorage.setItem('auth', 'true');
-      dispatch(setUser(res));
+      dispatch(setUser(dbUser));
+      dispatch(setBoard(dbBoards));
       dispatch(setIsAuth(true));
     }
 

@@ -5,6 +5,10 @@ export interface IUser {
   name: string;
 }
 
+export interface IAuthUser extends IUser {
+  boards: IBoards[];
+}
+
 export interface IBoards {
   id?: number;
   title: string;

@@ -16,10 +16,13 @@ import { DASHBOARD, LOGIN, SIGNUP } from './constants';
 import { useAppDispatch, useAppSelector } from '../hooks/rtkHooks';
 import { setBoard, setIsAuth, setUser } from '../store/userSlice';
 import { IBoards, IUser } from '../server/models';
+import { getUsers } from '../server/methods';
 
 export const AppRouter: React.FC = () => {
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector((state) => state.user);
+
+  // getUsers(); тестовый код для проверки нормализации
 
   useEffect(() => {
     if (localStorage.getItem('auth')) {
@@ -30,7 +33,7 @@ export const AppRouter: React.FC = () => {
         dispatch(setUser(JSON.parse(storageUser) as IUser));
       }
       if (storageBoard) {
-        dispatch(setBoard(JSON.parse(storageBoard) as IBoards));
+        dispatch(setBoard(JSON.parse(storageBoard[0]) as IBoards));
       }
 
       dispatch(setIsAuth(true));

@@ -25,7 +25,7 @@
       "id": 4
     }
   ],
-  "dashboards": [
+  "boards": [
     {
       "title": "board1",
       "userId": 1,
@@ -61,13 +61,13 @@
       "id": 1,
       "title": "toDo",
       "order": 0,
-      "dashboardId": 1
+      "boardId": 1
     },
     {
       "id": 2,
       "title": "work",
       "order": 1,
-      "dashboardId": 2
+      "boardId": 2
     }
   ]
 }
