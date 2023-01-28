@@ -1,14 +1,14 @@
+import { Layout } from 'antd';
+import { SideMenu } from '../../components/SideMenu';
 import { useAppSelector } from '../../hooks/rtkHooks';
 
 const DashboardPage = () => {
   const board = useAppSelector((state) => state.board.list);
 
   return (
-    <div>
-      {board.map((board) => (
-        <span key={board.id}>{board.title}</span>
-      ))}
-    </div>
+    <Layout.Content>
+      <SideMenu board={board} />
+    </Layout.Content>
   );
 };
 
