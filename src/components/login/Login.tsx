@@ -6,6 +6,7 @@ import { login, setError, setIsLoading } from '../../store/userSlice';
 import { DASHBOARD, SIGNUP } from '../../router/constants';
 import styles from './Login.module.scss';
 import { IUser } from '../../server/models';
+import { getAllBoards } from '../../store/boardSlice';
 
 export const Login = () => {
   const [form] = Form.useForm();
@@ -20,6 +21,7 @@ export const Login = () => {
     dispatch(setIsLoading(true));
     setTimeout(() => {
       dispatch(login(values));
+      dispatch(getAllBoards(values.email));
     }, 1000);
 
     form.resetFields();

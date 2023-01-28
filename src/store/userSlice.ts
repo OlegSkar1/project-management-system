@@ -8,13 +8,13 @@ import { AxiosResponse } from 'axios';
 import { AppDispatch } from '.';
 import { signIn, signUp } from '../server/methods';
 import { IBoards, IUser } from '../server/models';
+import { setBoard } from './boardSlice';
 
 type UserState = {
   isAuth: boolean;
   user: IUser;
   isLoading: boolean;
   error: string | null;
-  board: IBoards;
 };
 
 const initialState: UserState = {
@@ -25,11 +25,6 @@ const initialState: UserState = {
     name: '',
     email: '',
     password: '',
-  },
-  board: {
-    title: '',
-    userId: 0,
-    users: [],
   },
 };
 
@@ -45,10 +40,10 @@ export const signUpUser = createAsyncThunk<
 
     if (resUser.name) {
       dispatch(setUser(resUser));
-      dispatch(setBoard(resBoard));
+      dispatch(setBoard([resBoard]));
       dispatch(setIsAuth(true));
       localStorage.setItem('user', JSON.stringify(resUser));
-      localStorage.setItem('board', JSON.stringify(resBoard));
+      localStorage.setItem('boards', JSON.stringify([resBoard]));
       localStorage.setItem('auth', 'true');
       dispatch(setIsLoading(false));
     }
@@ -60,19 +55,17 @@ export const signUpUser = createAsyncThunk<
 });
 
 export const login = createAsyncThunk<
-  undefined,
+  void,
   IUser,
   { rejectValue: string; dispatch: AppDispatch }
 >('user/login', async (user, { rejectWithValue, dispatch }) => {
   try {
     dispatch(setError(null));
-    const [dbUser, dbBoards] = await signIn(user);
+    const dbUser = await signIn(user);
     if (dbUser.name) {
       localStorage.setItem('user', JSON.stringify(dbUser));
-      localStorage.setItem('board', JSON.stringify(dbBoards));
       localStorage.setItem('auth', 'true');
       dispatch(setUser(dbUser));
-      dispatch(setBoard(dbBoards));
       dispatch(setIsAuth(true));
     }
 
@@ -91,9 +84,9 @@ export const logout = createAsyncThunk<
 >('user/logout', async (_, { dispatch }) => {
   localStorage.removeItem('user');
   localStorage.removeItem('auth');
-  localStorage.removeItem('board');
+  localStorage.removeItem('boards');
   dispatch(setUser({} as IUser));
-  dispatch(setBoard({} as IBoards));
+  dispatch(setBoard([] as IBoards[]));
   dispatch(setIsAuth(false));
   dispatch(setError(null));
 });
@@ -104,9 +97,6 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
-    },
-    setBoard: (state, action: PayloadAction<IBoards>) => {
-      state.board = action.payload;
     },
     setIsAuth: (state, action: PayloadAction<boolean>) => {
       state.isAuth = action.payload;
@@ -128,10 +118,10 @@ const userSlice = createSlice({
   },
 });
 
-export const { setIsAuth, setIsLoading, setError, setUser, setBoard } =
-  userSlice.actions;
-export default userSlice.reducer;
-
 function isError(action: AnyAction) {
   return action.type.endsWith('rejected');
 }
+
+export const { setIsAuth, setIsLoading, setError, setUser } = userSlice.actions;
+
+export default userSlice.reducer;

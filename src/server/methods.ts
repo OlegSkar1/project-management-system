@@ -2,17 +2,11 @@ import axios from 'axios';
 import { BASE_URL } from './constants';
 import { IAuthUser, IBoards, IUser } from './models';
 
-export const signIn = async ({
-  email,
-  password,
-}: IUser): Promise<[IUser, IBoards]> => {
+export const signIn = async ({ email, password }: IUser): Promise<IUser> => {
   const dbUser = await getUser(email);
-  const dbBoard = await getBoard(email);
-
-  let resultBoards: IBoards[] = [];
 
   if (dbUser.length > 0 && dbUser[0].password === password) {
-    return [dbUser[0], dbBoard[0].boards[0]];
+    return dbUser[0];
   }
   throw new Response('', {
     status: 404,
@@ -60,12 +54,16 @@ export const addUser = async (user: IUser) => {
   return res.data;
 };
 
-export const getBoard = async (email: string) => {
-  return (
-    await axios.get<IAuthUser[]>(
-      `${BASE_URL}users?email=${email}&_embed=boards`
-    )
-  ).data;
+export const getOwnerBoard = async (email: string) => {
+  const ownerBoards = await axios.get<IAuthUser[]>(
+    `${BASE_URL}users?email=${email}&_embed=boards`
+  );
+
+  return ownerBoards.data[0].boards;
+};
+
+export const getBoards = async (email: string) => {
+  return (await axios.get<IBoards[]>(`${BASE_URL}boards?q=${email}`)).data;
 };
 
 export const addBoard = async (id?: number) => {

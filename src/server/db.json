@@ -29,24 +29,19 @@
     {
       "title": "board1",
       "userId": 1,
-      "users": [
-        "anje@test.com",
-        "test@test.com"
-      ],
+      "users": ["anje@test.com", "test@test.com"],
       "id": 1
     },
     {
       "title": "board2",
       "userId": 2,
-      "users": [
-        "test@test.com"
-      ],
+      "users": ["test@test.com", "user@test.com"],
       "id": 2
     },
     {
       "title": "board3",
       "userId": 3,
-      "users": [],
+      "users": ["user@test.com"],
       "id": 3
     },
     {
